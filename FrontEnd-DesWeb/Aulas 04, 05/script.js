@@ -1,15 +1,15 @@
-// Selecionando elementos
+// Seleciona os elementos
 const btn = document.getElementById("btnSaudar");
 const inputNome = document.getElementById("nome");
 const mensagem = document.getElementById("mensagem");
 
-// Função para exibir saudação
+// Função
 function saudar() {
   const nome = inputNome.value.trim();
-  if(nome) {
-    mensagem.textContent = `Olá, ${nome}! Seja bem-vindo(a)!`;
-  } else {
+
+  if(!nome) {
     mensagem.textContent = "Por favor, digite seu nome.";
+    return;
   }
 }
 
@@ -24,3 +24,23 @@ btn.addEventListener("mouseover", () => {
 btn.addEventListener("mouseout", () => {
   document.body.style.backgroundColor = "#f0f0f0";
 });
+
+// Fetch para enviar ao servidor
+  fetch('http://localhost:3000/saudacao', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome: nome })
+  })
+  .then(response => response.json())
+  .then(data => {
+    mensagem.textContent = data.mensagem; // mensagem do servidor
+  })
+  .catch(error => {
+    console.error('Erro:', error);
+    mensagem.textContent = "Ocorreu um erro ao se conectar com o servidor.";
+  });
+}
+
+
+  
+
